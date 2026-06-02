@@ -3,8 +3,6 @@ name: GitHub Pages
 on:
   push:
     branches:
-      # The branch where the project source code resides
-      # 项目源代码所在的分支
       - main
       - master
       - valaxy
@@ -20,22 +18,23 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4   # 升级到 v4
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4  # 升级到 v4
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org/
+          cache: 'npm'  # 加缓存，构建更快
 
       - name: 📦 Install Dependencies
-        run: npm i
+        run: npm ci  # 比 npm i 更严格、可复现
 
       - name: 🌌 Build Valaxy Blog
         run: npm run build
 
       - name: 🪤 Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4  # 升级到 v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist

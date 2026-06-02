@@ -11,7 +11,7 @@ const safelist = [
  */
 export default defineValaxyConfig<UserThemeConfig>({
   // site config see site.config.ts
-
+  base: '/Sariel-Blog/',
   theme: 'yun',
 
   themeConfig: {
