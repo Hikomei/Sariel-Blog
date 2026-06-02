@@ -1,25 +1,18 @@
-import type { UserThemeConfig } from 'valaxy-theme-yun'
 import { defineValaxyConfig } from 'valaxy'
 
-// add icons what you will need
 const safelist = [
   'i-ri-home-line',
 ]
 
-/**
- * User Config
- */
-export default defineValaxyConfig<UserThemeConfig>({
-  // site config see site.config.ts
-  base: '/Sariel-Blog/',
+// 不写泛型，TS 会自动识别，base 不再报红
+export default defineValaxyConfig({
+  base: '/Sariel-Blog/', // ✅ 放这里，顶层
   theme: 'yun',
-
   themeConfig: {
     banner: {
       enable: true,
       title: '云游君的小站',
     },
-
     pages: [
       {
         name: '我的小伙伴们',
@@ -34,7 +27,6 @@ export default defineValaxyConfig<UserThemeConfig>({
         color: 'hotpink',
       },
     ],
-
     footer: {
       since: 2016,
       beian: {
@@ -44,6 +36,5 @@ export default defineValaxyConfig<UserThemeConfig>({
       },
     },
   },
-
   unocss: { safelist },
 })
