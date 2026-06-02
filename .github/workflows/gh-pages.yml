@@ -1,41 +1,37 @@
-name: GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
-      - master
-      - valaxy
+    branches: [main]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        node-version: [lts/*]
-        os: [ubuntu-latest]
-      fail-fast: false
-
+  deploy:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4   # 升级到 v4
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4  # 升级到 v4
+      # 1. 用官方 action 装 pnpm（必须放在 setup-node 前面）
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          registry-url: https://registry.npmjs.org/
-          cache: 'pnpm'  # 加缓存，构建更快
+          version: 9
 
-      - name: 📦 Install Dependencies
-        run: pnpm i
+      # 2. 再装 Node，缓存设为 pnpm
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
 
-      - name: 🌌 Build Valaxy Blog
+      # 3. 正常安装、构建、部署
+      - name: Install deps
+        run: pnpm install
+
+      - name: Build
         run: pnpm build
 
-      - name: 🪤 Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4  # 升级到 v4
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          force_orphan: true
