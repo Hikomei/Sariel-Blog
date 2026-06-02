@@ -1,37 +1,34 @@
 name: Deploy to GitHub Pages
-
 on:
   push:
     branches: [main]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # 1. 用官方 action 装 pnpm（必须放在 setup-node 前面）
+      # 安装pnpm
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      # 2. 再装 Node，缓存设为 pnpm
+      # 去掉cache: pnpm，规避缓存报错
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
 
-      # 3. 正常安装、构建、部署
       - name: Install deps
         run: pnpm install
 
-      - name: Build
+      - name: Build Site
         run: pnpm build
 
-      - name: Deploy
+      - name: Deploy gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          force_orphan: true
