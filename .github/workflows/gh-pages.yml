@@ -28,10 +28,10 @@ jobs:
           cache: 'npm'  # 加缓存，构建更快
 
       - name: 📦 Install Dependencies
-        run: npm ci  # 比 npm i 更严格、可复现
+        run: pnpm i
 
       - name: 🌌 Build Valaxy Blog
-        run: npm run build
+        run: pnpm build
 
       - name: 🪤 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4  # 升级到 v4
